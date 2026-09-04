@@ -1,0 +1,37 @@
+.main-content {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 2rem;
+}
+
+.header {
+  width: min(100%, 48rem);
+}
+
+.decorative-text {
+  margin-block: 0 0.75rem;
+  padding-inline-start: 0.75rem;
+  color: var(--color-text);
+  border-inline-start: 0.25rem solid var(--color-highlight);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.title {
+  max-width: 12ch;
+  margin: 0;
+  color: var(--color-text-strong);
+  font-size: var(--step-5);
+  line-height: 0.95;
+}
+
+.intro {
+  max-width: 38rem;
+  margin-block: 1.5rem 0;
+  color: var(--color-text);
+  font-size: var(--step-1);
+  line-height: 1.6;
+}

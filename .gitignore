@@ -1,38 +1,24 @@
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
-.yarn/install-state.gz
+node_modules
 
-# testing
-/coverage
-/test-results
-/storybook-archive
+# build and test output
+coverage
+dist
+playwright-report
+test-results
 
-# next.js
-/.next/
-/out/
+# local environment files
+.env
+.env.*
+!.env.example
 
-# production
-/build
-build-archive.log
+# deployment and tooling
+.vercel
+*.tsbuildinfo
 
-# misc
+# logs
+*.log
+
+# operating system and local certificates
 .DS_Store
 *.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# local env files
-.env
-.env*.local
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts

@@ -1,0 +1,47 @@
+:root {
+  --color-background: oklch(99.97% 0.0013 106.42deg);
+  --color-text-strong: oklch(27.76% 0.058 287.74deg);
+  --color-text: oklch(32.6% 0.0418 272.66deg);
+  --color-highlight: oklch(88.88% 0.1824 95.73deg);
+  --color-surface-subtle: oklch(95.89% 0.02 193.01deg);
+  --color-accent-subtle: oklch(89.89% 0.0474 196.34deg);
+
+  /* @link https://utopia.fyi/type/calculator?c=320,16,1.2,1440,18,1.333,5,1 */
+  --step--1: clamp(0.8333rem, 0.8303rem + 0.0152vw, 0.844rem);
+  --step-0: clamp(1rem, 0.9643rem + 0.1786vw, 1.125rem);
+  --step-1: clamp(1.2rem, 1.1144rem + 0.428vw, 1.4996rem);
+  --step-2: clamp(1.44rem, 1.2803rem + 0.7986vw, 1.999rem);
+  --step-3: clamp(1.728rem, 1.4604rem + 1.3381vw, 2.6647rem);
+  --step-4: clamp(2.0736rem, 1.6512rem + 2.112vw, 3.552rem);
+  --step-5: clamp(2.4883rem, 1.8465rem + 3.2093vw, 4.7348rem);
+
+  color: var(--color-text);
+  background-color: var(--color-background);
+  color-scheme: light;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizelegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 20rem;
+  min-height: 100vh;
+  margin: 0;
+  font-size: var(--step-0);
+}
+
+::selection {
+  color: var(--color-text-strong);
+  background-color: var(--color-highlight);
+}

@@ -1,0 +1,32 @@
+{
+  "name": "electricity-data-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Solita Dev Academy Exercise: Autumn 2026 - Electricity Data App",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "dev": "concurrently --names api,web --prefix-colors red,green \"npm run dev --workspace @electricity/api\" \"npm run dev --workspace @electricity/web\"",
+    "lint": "eslint . && npm run lint:styles",
+    "lint:styles": "stylelint \"apps/web/src/**/*.css\"",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.0.0",
+    "concurrently": "^10.0.5",
+    "eslint": "^10.10.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.6",
+    "globals": "^17.12.0",
+    "prettier": "^3.9.6",
+    "stylelint": "^17.15.0",
+    "stylelint-config-standard": "^40.0.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.69.0"
+  }
+}
