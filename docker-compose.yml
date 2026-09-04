@@ -1,0 +1,42 @@
+name: electricity-data-app
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stoppeds
+    # solution for exercise purposes (exposing credentials)
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-electricity}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-academy}
+      POSTGRES_USER: ${POSTGRES_USER:-academy}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    # keeps data between container recreations
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready --username=$${POSTGRES_USER} --dbname=$${POSTGRES_DB}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+    ports:
+      - "${ADMINER_PORT:-8088}:8080"
+
+volumes:
+  postgres-data:
