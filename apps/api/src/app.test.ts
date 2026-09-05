@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import { buildApp } from './app.js';
-import { type DailyStatistic } from './modules/daily-statistics/daily-statistics.repository.js';
+import {
+  type DailyStatistic,
+  type DailyStatisticsQuery,
+} from './modules/daily-statistics/daily-statistics.repository.js';
 
 const dailyStatistic: DailyStatistic = {
   averagePrice: 43.5,
@@ -15,7 +18,7 @@ const dailyStatistic: DailyStatistic = {
 const createDependencies = () => ({
   closeDatabaseConnection: async () => undefined,
   dailyStatisticsRepository: {
-    findAll: async () => [dailyStatistic],
+    findAll: async () => ({ data: [dailyStatistic], total: 1 }),
   },
 });
 
@@ -39,5 +42,91 @@ test('GET /api/daily-statistics returns daily statistics', async (context) => {
   });
 
   assert.equal(response.statusCode, 200);
-  assert.deepEqual(response.json(), { data: [dailyStatistic] });
+  assert.deepEqual(response.json(), {
+    data: [dailyStatistic],
+    pagination: { page: 1, pageSize: 20, total: 1, totalPages: 1 },
+  });
+});
+
+test('query defaults and typed filters reach the repository', async (context) => {
+  const queries: DailyStatisticsQuery[] = [];
+  const dependencies = {
+    ...createDependencies(),
+    dailyStatisticsRepository: {
+      findAll: async (query: DailyStatisticsQuery) => {
+        queries.push(query);
+        return { data: [], total: 41 };
+      },
+    },
+  };
+  const app = buildApp({ dependencies, logger: false });
+  context.after(() => app.close());
+
+  await app.inject('/api/daily-statistics');
+  assert.deepEqual(queries[0], {
+    page: 1,
+    pageSize: 20,
+    sortBy: 'date',
+    sortOrder: 'desc',
+  });
+
+  const response = await app.inject(
+    '/api/daily-statistics?page=4&pageSize=10&sortBy=averagePrice&sortOrder=asc&search=2024-05&dateFrom=2024-05-01&dateTo=2024-05-31&hasNegativePrices=false',
+  );
+  assert.equal(response.statusCode, 200);
+  assert.deepEqual(
+    { ...queries[1] },
+    {
+      page: 4,
+      pageSize: 10,
+      sortBy: 'averagePrice',
+      sortOrder: 'asc',
+      search: '2024-05',
+      dateFrom: '2024-05-01',
+      dateTo: '2024-05-31',
+      hasNegativePrices: false,
+    },
+  );
+  assert.deepEqual(response.json().pagination, {
+    page: 4,
+    pageSize: 10,
+    total: 41,
+    totalPages: 5,
+  });
+});
+
+test('invalid queries return 400 without querying the db', async (context) => {
+  const dependencies = createDependencies();
+  dependencies.dailyStatisticsRepository.findAll = async () => {
+    assert.fail('Invalid input must not reach the repository');
+  };
+  const app = buildApp({ dependencies, logger: false });
+  context.after(() => app.close());
+
+  for (const query of [
+    'page=0',
+    'page=-1',
+    'page=1.5',
+    'page=abc',
+    'page=1000001',
+    'pageSize=0',
+    'pageSize=101',
+    'sortBy=unknown',
+    'sortBy=__proto__',
+    'sortBy=date%3BDROP%20TABLE%20electricityData',
+    'sortOrder=sideways',
+    'dateFrom=2023-02-29',
+    'dateTo=2024-13-01',
+    'dateFrom=0000-01-01',
+    'dateFrom=2024-05-02&dateTo=2024-05-01',
+    'search=2024-02-30',
+    'search=2024-13',
+    'search=%25',
+    'search=',
+    'hasNegativePrices=yes',
+    'page=1&page=2',
+  ]) {
+    const response = await app.inject(`/api/daily-statistics?${query}`);
+    assert.equal(response.statusCode, 400, query);
+  }
 });
