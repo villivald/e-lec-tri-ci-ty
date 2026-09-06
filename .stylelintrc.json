@@ -3,5 +3,16 @@
   "rules": {
     "selector-class-pattern": "(.*?)",
     "custom-property-pattern": "(.*?)"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.module.css"],
+      "rules": {
+        "selector-pseudo-class-no-unknown": [
+          true,
+          { "ignorePseudoClasses": ["global"] }
+        ]
+      }
+    }
+  ]
 }

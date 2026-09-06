@@ -5,6 +5,14 @@
   --color-highlight: oklch(88.88% 0.1824 95.73deg);
   --color-surface-subtle: oklch(95.89% 0.02 193.01deg);
   --color-accent-subtle: oklch(89.89% 0.0474 196.34deg);
+  --color-border: color-mix(
+    in oklch,
+    var(--color-text-strong) 18%,
+    var(--color-background)
+  );
+  --font-body:
+    'Inter', ui-sans-serif, system-ui, -apple-system, 'BlinkMacSystemFont',
+    'Segoe UI', sans-serif;
 
   /* @link https://utopia.fyi/type/calculator?c=320,16,1.2,1440,18,1.333,5,1 */
   --step--1: clamp(0.8333rem, 0.8303rem + 0.0152vw, 0.844rem);
@@ -18,14 +26,7 @@
   color: var(--color-text);
   background-color: var(--color-background);
   color-scheme: light;
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    sans-serif;
+  font-family: var(--font-body);
   font-synthesis: none;
   text-rendering: optimizelegibility;
 }
@@ -39,9 +40,26 @@ body {
   min-height: 100vh;
   margin: 0;
   font-size: var(--step-0);
+  line-height: 1.55;
 }
 
 ::selection {
   color: var(--color-text-strong);
   background-color: var(--color-highlight);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-text-strong);
+  outline-offset: 3px;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.2em;
 }
