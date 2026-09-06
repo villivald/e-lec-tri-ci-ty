@@ -60,6 +60,45 @@ const dailyStatisticSchema = {
   },
 } as const;
 
+const hourlyReadingSchema = {
+  type: 'object',
+  additionalProperties: false,
+  required: [
+    'id',
+    'startTime',
+    'consumptionAmount',
+    'productionAmount',
+    'hourlyPrice',
+    'consumptionProductionGapMwh',
+  ],
+  properties: {
+    id: { type: 'integer' },
+    startTime: { type: 'string' },
+    consumptionAmount: nullableNumberSchema,
+    productionAmount: nullableNumberSchema,
+    hourlyPrice: nullableNumberSchema,
+    consumptionProductionGapMwh: nullableNumberSchema,
+  },
+} as const;
+
+const dayDetailsSchema = {
+  ...dailyStatisticSchema,
+  required: [
+    ...dailyStatisticSchema.required,
+    'hours',
+    'cheapestHours',
+    'largestConsumptionGapHour',
+  ],
+  properties: {
+    ...dailyStatisticSchema.properties,
+    hours: { type: 'array', items: hourlyReadingSchema },
+    cheapestHours: { type: 'array', items: hourlyReadingSchema },
+    largestConsumptionGapHour: {
+      anyOf: [hourlyReadingSchema, { type: 'null' }],
+    },
+  },
+} as const;
+
 export const registerDailyStatisticsRoutes = (
   app: FastifyInstance,
   repository: DailyStatisticsRepository,
@@ -117,6 +156,40 @@ export const registerDailyStatisticsRoutes = (
           totalPages: Math.ceil(result.total / pageSize),
         },
       };
+    },
+  );
+
+  app.get<{ Params: { date: string } }>(
+    '/api/daily-statistics/:date',
+    {
+      schema: {
+        params: {
+          type: 'object',
+          required: ['date'],
+          properties: { date: dateSchema },
+        },
+        response: {
+          200: {
+            type: 'object',
+            additionalProperties: false,
+            required: ['data'],
+            properties: { data: dayDetailsSchema },
+          },
+        },
+      },
+    },
+    async (request, reply) => {
+      const data = await repository.findByDate(request.params.date);
+
+      if (!data) {
+        return reply.code(404).send({
+          statusCode: 404,
+          error: 'Not Found',
+          message: 'No electricity data found for this date',
+        });
+      }
+
+      return { data };
     },
   );
 };
