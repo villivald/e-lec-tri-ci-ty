@@ -1,0 +1,107 @@
+.paper {
+  color: var(--color-text);
+  background: var(--color-background);
+}
+
+.title {
+  padding: 1.5rem;
+  color: var(--color-text-strong);
+  border-block-end: 1px solid var(--color-border);
+  font-size: var(--step-2);
+  font-weight: 650;
+  letter-spacing: -0.035em;
+}
+
+.content {
+  padding: 1.5rem;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-block: 1.5rem;
+}
+
+.summary > div {
+  padding: 1.25rem;
+  background: var(--color-surface-subtle);
+  border-radius: 0.75rem;
+}
+
+.summary dt {
+  font-size: var(--step--1);
+}
+
+.summary dd {
+  margin: 0.5rem 0 0;
+  color: var(--color-text-strong);
+  font-size: var(--step-1);
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.highlight {
+  padding-block: 1.25rem;
+  border-block-start: 1px solid var(--color-border);
+}
+
+.highlight h3 {
+  margin: 0;
+  color: var(--color-text-strong);
+  font-size: var(--step-1);
+}
+
+.highlight p {
+  margin-block: 0.75rem 0;
+  font-size: var(--step--1);
+  line-height: 1.7;
+}
+
+.hours {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0;
+  margin-block: 1rem 0;
+  list-style: none;
+}
+
+.hours li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  font-size: var(--step--1);
+}
+
+.hours strong {
+  padding-inline: 0.25rem;
+  color: var(--color-text-strong);
+  background: var(--color-highlight);
+}
+
+.gap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.actions {
+  padding: 1rem 1.5rem;
+  border-block-start: 1px solid var(--color-border);
+}
+
+@media (width < 40rem) {
+  .summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .title,
+  .content,
+  .actions {
+    padding-inline: 1rem;
+  }
+}

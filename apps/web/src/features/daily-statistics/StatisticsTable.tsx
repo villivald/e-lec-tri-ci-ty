@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 
 import { type DailyStatistic, type SortColumn } from './useDailyStatistics';
+import { dateFormat, energyFormat, priceFormat } from './formatters';
 import styles from './DailyStatistics.module.css';
 
 const columns: { key: SortColumn; label: string; unit: string }[] = [
@@ -21,21 +22,6 @@ const columns: { key: SortColumn; label: string; unit: string }[] = [
   },
 ];
 
-const energyFormat = new Intl.NumberFormat('fi-FI', {
-  minimumFractionDigits: 1,
-  maximumFractionDigits: 1,
-});
-const priceFormat = new Intl.NumberFormat('fi-FI', {
-  minimumFractionDigits: 3,
-  maximumFractionDigits: 3,
-});
-const dateFormat = new Intl.DateTimeFormat('fi-FI', {
-  day: '2-digit',
-  month: 'short',
-  year: 'numeric',
-  timeZone: 'UTC',
-});
-
 const formatValue = (value: number | null, formatter: Intl.NumberFormat) =>
   value === null ? (
     <span aria-label="Not available">—</span>
@@ -48,9 +34,16 @@ interface Props {
   sortBy: SortColumn;
   sortOrder: 'asc' | 'desc';
   onSort: (column: SortColumn) => void;
+  onSelectDate: (date: string) => void;
 }
 
-export const StatisticsTable = ({ rows, sortBy, sortOrder, onSort }: Props) => (
+export const StatisticsTable = ({
+  rows,
+  sortBy,
+  sortOrder,
+  onSort,
+  onSelectDate,
+}: Props) => (
   <div
     className={styles.tableScroll}
     tabIndex={0}
@@ -96,9 +89,16 @@ export const StatisticsTable = ({ rows, sortBy, sortOrder, onSort }: Props) => (
         {rows.map((row) => (
           <TableRow key={row.date}>
             <TableCell component="th" scope="row" className={styles.dateCell}>
-              <time dateTime={row.date}>
-                {dateFormat.format(new Date(`${row.date}T00:00:00Z`))}
-              </time>
+              <button
+                type="button"
+                className={styles.dateButton}
+                onClick={() => onSelectDate(row.date)}
+                aria-haspopup="dialog"
+              >
+                <time dateTime={row.date}>
+                  {dateFormat.format(new Date(`${row.date}T00:00:00Z`))}
+                </time>
+              </button>
             </TableCell>
 
             <TableCell>

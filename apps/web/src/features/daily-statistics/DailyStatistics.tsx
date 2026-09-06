@@ -12,11 +12,13 @@ import {
   type StatisticsFiltersValue,
 } from './StatisticsFilters';
 import { StatisticsTable } from './StatisticsTable';
+import { DayDetailsDialog } from './DayDetailsDialog';
 import { useDailyStatistics, type SortColumn } from './useDailyStatistics';
 import styles from './DailyStatistics.module.css';
 
 export const DailyStatistics = () => {
   const isSmallScreen = useMediaQuery('(width < 40rem)');
+  const [selectedDate, setSelectedDate] = useState<string>();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
   const [sort, setSort] = useState<{
@@ -119,6 +121,7 @@ export const DailyStatistics = () => {
               sortBy={sort.column}
               sortOrder={sort.order}
               onSort={sortBy}
+              onSelectDate={setSelectedDate}
             />
           ) : (
             <div className={styles.state}>
@@ -157,6 +160,13 @@ export const DailyStatistics = () => {
           </div>
         )}
       </div>
+
+      {selectedDate && (
+        <DayDetailsDialog
+          date={selectedDate}
+          onClose={() => setSelectedDate(undefined)}
+        />
+      )}
     </section>
   );
 };

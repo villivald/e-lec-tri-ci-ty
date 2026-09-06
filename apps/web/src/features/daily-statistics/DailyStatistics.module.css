@@ -207,6 +207,21 @@
   white-space: nowrap;
 }
 
+.date-button {
+  padding: 0.25rem 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font-weight: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.date-button:hover {
+  background: var(--color-highlight);
+}
+
 .negative-price,
 .streak {
   padding: 0.125rem 0.25rem;
