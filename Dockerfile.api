@@ -1,0 +1,27 @@
+FROM node:24-bookworm-slim AS build
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+COPY apps/api/package.json ./apps/api/
+RUN npm ci --workspace @electricity/api --include-workspace-root
+
+COPY tsconfig.base.json ./
+COPY apps/api ./apps/api
+RUN npm run build --workspace @electricity/api
+
+FROM node:24-bookworm-slim AS runtime
+
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=3001
+
+COPY package.json package-lock.json ./
+COPY apps/api/package.json ./apps/api/
+RUN npm ci --omit=dev --workspace @electricity/api
+
+COPY --from=build /app/apps/api/dist ./apps/api/dist
+
+USER node
+EXPOSE 3001
+CMD ["node", "apps/api/dist/server.js"]

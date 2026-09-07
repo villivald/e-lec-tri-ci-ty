@@ -27,6 +27,19 @@ services:
       retries: 20
       start_period: 20s
 
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-academy}:${POSTGRES_PASSWORD:-academy}@db:5432/${POSTGRES_DB:-electricity}
+    ports:
+      - '${API_PORT:-3001}:3001'
+
   adminer:
     image: adminer
     restart: unless-stopped
