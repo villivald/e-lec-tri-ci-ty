@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import {
   Button,
   CircularProgress,
@@ -14,7 +15,7 @@ import { dateFormat, energyFormat, priceFormat } from './formatters';
 import commonStyles from './DailyStatistics.module.css';
 import styles from './DayDetailsDialog.module.css';
 
-interface HourlyReading {
+export interface HourlyReading {
   id: number;
   startTime: string;
   consumptionAmount: number | null;
@@ -22,6 +23,8 @@ interface HourlyReading {
   hourlyPrice: number | null;
   consumptionProductionGapMwh: number | null;
 }
+
+const HourlyCharts = lazy(() => import('./HourlyCharts'));
 
 interface DayDetails extends DailyStatistic {
   hours: HourlyReading[];
@@ -117,6 +120,10 @@ export const DayDetailsDialog = ({
                   </dd>
                 </div>
               </dl>
+
+              <Suspense fallback={<p role="status">Loading charts…</p>}>
+                <HourlyCharts hours={day.hours} />
+              </Suspense>
 
               <section
                 className={styles.highlight}

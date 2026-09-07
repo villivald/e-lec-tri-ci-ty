@@ -1,0 +1,27 @@
+.charts {
+  min-width: 0;
+}
+
+.charts section {
+  padding-block: 1.25rem;
+  border-block-start: 1px solid var(--color-border);
+}
+
+.charts h3 {
+  margin-block: 0 1rem;
+  color: var(--color-text-strong);
+  font-size: var(--step-1);
+}
+
+.charts p {
+  font-size: var(--step--1);
+}
+
+.charts :global(.MuiChartsAxis-tickLabel),
+.charts :global(.MuiChartsLegend-label) {
+  font-size: var(--step--1);
+}
+
+.charts :global(.MuiLineChart-line)[data-series='production'] {
+  stroke-dasharray: 6 4;
+}
