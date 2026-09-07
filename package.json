@@ -13,10 +13,12 @@
     "lint": "eslint . && npm run lint:styles",
     "lint:styles": "stylelint \"apps/web/src/**/*.css\"",
     "test": "npm run test --workspaces --if-present",
-    "typecheck": "npm run typecheck --workspaces --if-present"
+    "test:e2e": "playwright test",
+    "typecheck": "npm run typecheck --workspaces --if-present && tsc --noEmit"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.63.0",
     "@types/node": "^24.0.0",
     "concurrently": "^10.0.5",
     "eslint": "^10.10.0",

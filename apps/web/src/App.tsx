@@ -29,9 +29,6 @@ export const App = () => (
 
     <main className={styles.mainContent}>
       <section className={styles.header} aria-labelledby="page-title">
-        <p className={styles.decorativeText}>
-          Overview of daily electricity data
-        </p>
         <h1 id="page-title" className={styles.title}>
           Energy <span>statistics</span>
         </h1>
