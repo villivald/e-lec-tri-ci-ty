@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { buildApp } from './app.js';
+import { buildApp } from './build-app.js';
 import {
   type DailyStatistic,
   type DailyStatisticsQuery,

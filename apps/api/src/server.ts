@@ -1,4 +1,6 @@
-import { buildApp } from './app.js';
+import 'fastify';
+
+import { buildApp } from './build-app.js';
 
 const DEFAULT_PORT = 3001;
 const parsedPort = Number.parseInt(process.env.PORT ?? `${DEFAULT_PORT}`, 10);
@@ -13,9 +15,7 @@ const closeGracefully = async (): Promise<void> => {
 process.on('SIGINT', closeGracefully);
 process.on('SIGTERM', closeGracefully);
 
-try {
-  await app.listen({ host: '0.0.0.0', port });
-} catch (error) {
+void app.listen({ host: '0.0.0.0', port }).catch((error: unknown) => {
   app.log.error(error);
   process.exit(1);
-}
+});
